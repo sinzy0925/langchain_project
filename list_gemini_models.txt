@@ -1,0 +1,308 @@
+モデル名: models/gemini-1.0-pro-vision-latest
+  説明: The original Gemini 1.0 Pro Vision model version which was optimized for image understanding. Gemini 1.0 Pro Vision was deprecated on July 12, 2024. Move to a newer Gemini version.
+  入力トークン上限: 12288
+  出力トークン上限: 4096
+---
+
+
+モデル名: models/gemini-pro-vision
+  説明: The original Gemini 1.0 Pro Vision model version which was optimized for image understanding. Gemini 1.0 Pro Vision was deprecated on July 12, 2024. Move to a newer Gemini version.
+  入力トークン上限: 12288
+  出力トークン上限: 4096
+---
+
+
+モデル名: models/gemini-1.5-pro-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-pro-002
+  説明: Stable version of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens, released in September of 2024.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-pro
+  説明: Stable version of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens, released in May of 2024.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash
+  説明: Alias that points to the most recent stable version of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-002
+  説明: Stable version of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in September of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b
+  説明: Stable version of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b-001
+  説明: Stable version of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.5-pro-exp-03-25
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-03-25
+  説明: Gemini 2.5 Pro Preview 03-25
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-04-17
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-05-20
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash
+  説明: Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-04-17-thinking
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-lite-preview-06-17
+  説明: Preview release (June 11th, 2025) of Gemini 2.5 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-05-06
+  説明: Preview release (May 6th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-06-05
+  説明: Preview release (June 5th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro
+  説明: Stable release (June 17th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-exp
+  説明: Gemini 2.0 Flash Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash
+  説明: Gemini 2.0 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-001
+  説明: Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-exp-image-generation
+  説明: Gemini 2.0 Flash (Image Generation) Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-001
+  説明: Stable version of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite
+  説明: Gemini 2.0 Flash-Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-preview-image-generation
+  説明: Gemini 2.0 Flash Preview Image Generation
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-preview-02-05
+  説明: Preview release (February 5th, 2025) of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-preview
+  説明: Preview release (February 5th, 2025) of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-pro-exp
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-pro-exp-02-05
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-exp-1206
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp-01-21
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp-1219
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-tts
+  説明: Gemini 2.5 Flash Preview TTS
+  入力トークン上限: 8192
+  出力トークン上限: 16384
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-tts
+  説明: Gemini 2.5 Pro Preview TTS
+  入力トークン上限: 8192
+  出力トークン上限: 16384
+---
+
+
+モデル名: models/learnlm-2.0-flash-experimental
+  説明: LearnLM 2.0 Flash Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 32768
+---
+
+
+モデル名: models/gemma-3-1b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-4b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-12b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-27b-it
+  説明: 
+  入力トークン上限: 131072
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3n-e4b-it
+  説明: 
+  入力トークン上限: 8192
+  出力トークン上限: 2048
+---
+
+
