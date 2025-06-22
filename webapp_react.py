@@ -6,6 +6,7 @@ import json
 from uuid import uuid4
 import traceback
 import time
+from datetime import datetime, timezone, timedelta # datetimeをインポート
 
 from dotenv import load_dotenv
 
@@ -36,15 +37,19 @@ def setup_agent():
     
     return agent_executor
 
-# --- 3. セッション状態の初期化 ---
-#SYSTEM_INSTRUCTION = """
-#あなたは、優秀なWeb調査アシスタントです。ユーザーの指示に基づき、与えられたツールを駆使して情報を収集し、要約して回答します。
-#あなたの行動原則は「思考-行動-観察-反復」です。一度のツール実行で結果が得られなかったり、エラーが出たりした場合は、決して諦めず、検索クエリを変えるなどアプローチを修正して、粘り強くタスクを遂行してください。
-#"""
-# webapp.py の SYSTEM_INSTRUCTION を置き換える
+def get_system_instruction() -> str:
+    """
+    現在日時を含むシステムプロンプトを生成する。
+    """
+    # 日本標準時(JST, UTC+9)を取得
+    jst = timezone(timedelta(hours=+9), 'JST')
+    now = datetime.now(jst)
+    current_date_str = now.strftime('%Y年%m月%d日 %H:%M')
 
-SYSTEM_INSTRUCTION = """
+    return f"""
 あなたは、極めて優秀で洞察力に富んだWeb調査の専門家です。あなたの目的は、ユーザーの質問に対し、表層的な情報だけでなく、複数の情報源を統合した質の高い、深い回答を提供することです。
+
+**現在のあなたがいる日時は {current_date_str} です。** この情報を常に念頭に置き、最新の情報を基に回答してください。
 
 **高品質な回答を生成するための思考フレームワーク:**
 # **重要 (Important):** どれほど難しい要望でも、以下の思考を繰り返せば、必ずユーザーが感動する回答を得られますので、諦めずに作業してください。
@@ -75,12 +80,14 @@ SYSTEM_INSTRUCTION = """
 このフレームワークに従い、ユーザーが感動するような、プロフェッショナルな調査と回答を提供してください。
 """
 
+# --- 3. セッション状態の初期化 ---
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid4())
 if "messages" not in st.session_state:
-    st.session_state.messages = [AIMessage(content=SYSTEM_INSTRUCTION)]
+    #st.session_state.messages = [AIMessage(content=SYSTEM_INSTRUCTION)]
+    st.session_state.messages = [AIMessage(content=get_system_instruction())]
 
-
+print(st.session_state.messages)
 
 # ▼▼▼▼▼ 変更点: agent_is_thinkingフラグを追加 ▼▼▼▼▼
 if "agent_is_thinking" not in st.session_state:
