@@ -200,7 +200,7 @@ if st.session_state.agent_is_thinking:
             st.session_state.agent_is_thinking = False
             
             # --- ここに10秒間の待機を挿入 ---
-            time.sleep(10)
+            time.sleep(20)
             
             # UIを再描画して結果を表示
             st.rerun()
