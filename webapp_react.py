@@ -5,6 +5,7 @@ import os
 import json
 from uuid import uuid4
 import traceback
+import time
 
 from dotenv import load_dotenv
 
@@ -40,34 +41,51 @@ def setup_agent():
 #あなたは、優秀なWeb調査アシスタントです。ユーザーの指示に基づき、与えられたツールを駆使して情報を収集し、要約して回答します。
 #あなたの行動原則は「思考-行動-観察-反復」です。一度のツール実行で結果が得られなかったり、エラーが出たりした場合は、決して諦めず、検索クエリを変えるなどアプローチを修正して、粘り強くタスクを遂行してください。
 #"""
+# webapp.py の SYSTEM_INSTRUCTION を置き換える
+
 SYSTEM_INSTRUCTION = """
-あなたは、優秀なWeb調査アシスタントです。ユーザーの指示に基づき、与えられたツールを駆使して情報を収集し、要約して回答します。
+あなたは、極めて優秀で洞察力に富んだWeb調査の専門家です。あなたの目的は、ユーザーの質問に対し、表層的な情報だけでなく、複数の情報源を統合した質の高い、深い回答を提供することです。
 
-あなたの基本ワークフローと行動原則は以下の通りです:
+**高品質な回答を生成するための思考フレームワーク:**
+# **重要 (Important):** どれほど難しい要望でも、以下の思考を繰り返せば、必ずユーザーが感動する回答を得られますので、諦めずに作業してください。
 
-**基本ワークフロー:**
-1.  **一次調査 (google_search)**: まず、ユーザーの質問に関連する情報を `google_search` ツールを使って幅広く収集します。これにより、概要、関連キーワード、そして最も重要ないくつかのURLを特定します。
-2.  **二次調査 (crawl_website)**: 一次調査で見つかった**最も重要そうなURL**に対して、`crawl_website` ツールを使って詳細な情報を収集します。これにより、特定のウェブサイトのコンテンツを深く掘り下げます。
-3.  **情報統合と回答**: 上記の調査で得られたすべての情報を統合し、要約して、ユーザーに包括的な回答を生成します。
+1.  **質問の分解と計画 (Decomposition & Planning):**
+    - ユーザーの質問の真の意図は何か？
+    - この問いに答えるには、どのような情報が必要か？
+    - どのツールを使えば、その情報を最も効率的に集められるか？
+    - まずは `google_search` で全体像と主要な情報源を把握するのが定石だ。
 
-**行動原則:**
-1.  **思考せよ (Thought)**: ユーザーの要求を分析し、タスクを達成するための計画を立てます。
-2.  **行動せよ (Action)**: 計画に基づき、利用可能なツールの中から最適なものを選択し、実行します。
-3.  **観察せよ (Observation)**: ツールの実行結果を注意深く観察します。
-    **重要**: もしツールの結果が `FATAL_ERROR:` という文字列で始まる場合は、そのエラーは回復不能です。**それ以上のツール使用を直ちに中止し**、そのエラー内容をユーザーに分かりやすく報告してください。
-4.  **反復せよ (Iteration)**: 観察結果が最終的な回答を生成するのに十分かどうかを判断します。
-    - もし情報が不十分な場合や、ツールがエラーを返した場合は、諦めずに**計画を修正し、異なるツールや異なる引数で再度行動**します。例えば、検索クエリを変えたり、別のウェブサイトをクロールしたりします。
-    - ユーザーに質問を投げかけ、調査の方向性を確認することも有効な手段です。
-5.  **回答せよ**: すべての情報が揃った、あるいはFATAL_ERRORにより調査が続行不能になったと判断した場合にのみ、収集した情報を統合し、ユーザーに最終的な回答を生成します。
+2.  **一次調査と情報源の特定 (Initial Research & Source Identification):**
+    - `google_search` を実行し、信頼できそうな公式サイト、専門家のブログ、ニュース記事などのURLをいくつか見つける。
+    - この時点で答えが完全に得られたと思っても、それは表面的な情報かもしれない。より信頼性の高い回答のためには、情報源の一次情報にあたることが重要だ。
 
-常にこの「思考-行動-観察-反復」のサイクルを意識して、粘り強くタスクを遂行してください。
-このワークフローに従い、徹底的な調査を行ってください。
+3.  **深掘り調査 (Deep Dive):**
+    - 一次調査で見つけたURLの中から、最も有益と思われるものを選び、**`crawl_website` ツールを使ってそのページの内容を直接調査する。**
+    - このステップを踏むことで、あなたの回答は他の誰にも真似できない、独自の価値を持つものになる。
+
+4.  **統合と結論 (Synthesis & Conclusion):**
+    - `google_search` の結果と `crawl_website` の結果を組み合わせ、矛盾がないか確認し、情報を統合する。
+    - 複数の視点からの情報を基に、ユーザーにとって最も価値のある結論を導き出し、分かりやすく要約して提示する。
+
+**エラーへの対処:**
+- ツールが `FATAL_ERROR:` を返した場合、それは回復不能な問題です。調査を中止し、その旨を丁寧に報告してください。
+- それ以外のエラーの場合は、クエリを変えるなど、別のアプローチを試みてください。
+
+# **重要 (Important):** どれほど難しい要望でも、以下の思考を繰り返せば、必ずユーザーが感動する回答を得られますので、諦めずに作業してください。
+このフレームワークに従い、ユーザーが感動するような、プロフェッショナルな調査と回答を提供してください。
 """
 
 if "thread_id" not in st.session_state:
     st.session_state.thread_id = str(uuid4())
 if "messages" not in st.session_state:
     st.session_state.messages = [AIMessage(content=SYSTEM_INSTRUCTION)]
+
+
+
+# ▼▼▼▼▼ 変更点: agent_is_thinkingフラグを追加 ▼▼▼▼▼
+if "agent_is_thinking" not in st.session_state:
+    st.session_state.agent_is_thinking = False
+# ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
 # --- 4. メイン処理 ---
 try:
@@ -143,31 +161,77 @@ if len(st.session_state.messages) > 1:
 
 
 # --- 5. ユーザー入力とエージェント実行 (完全同期) ---
-if prompt := st.chat_input("Ask me to research something..."):
-    # ユーザーのメッセージを現在の履歴に追加
-    st.session_state.messages.append(HumanMessage(content=prompt))
-    
-    with st.chat_message("user", avatar="👤"):
-        st.markdown(prompt)
 
-    with st.spinner("🤖 Agent is processing... Please wait."):
-        try:
-            config = {"configurable": {"thread_id": st.session_state.thread_id}}
+
+# ▼▼▼▼▼ 変更点: UIロジック全体を修正 ▼▼▼▼▼
+
+# エージェントが処理中でない場合にのみ、入力ボックスを表示
+if not st.session_state.agent_is_thinking:
+    if prompt := st.chat_input("Ask me to research something..."):
+        # ユーザーの入力を受け付けたら、処理中フラグを立ててUIを再描画
+        st.session_state.messages.append(HumanMessage(content=prompt))
+        st.session_state.agent_is_thinking = True
+        st.rerun()
+
+# 処理中フラグが立っている場合、エージェントを実行
+if st.session_state.agent_is_thinking:
+    # 最後のメッセージがユーザーからのものであることを確認
+    if st.session_state.messages and isinstance(st.session_state.messages[-1], HumanMessage):
+        with st.chat_message("user", avatar="👤"):
+             st.markdown(st.session_state.messages[-1].content)
+
+        with st.spinner("🤖 Agent is processing... Please wait."):
+            try:
+                config = {"configurable": {"thread_id": st.session_state.thread_id}}
+                agent_input = {"messages": st.session_state.messages}
+                
+                response = agent_executor.invoke(agent_input, config)
+
+                if response and "messages" in response:
+                    st.session_state.messages = response["messages"]
+                else:
+                    st.session_state.messages.append(AIMessage(content="Sorry, I received an unexpected response from the agent."))
+
+            except Exception:
+                error_message = f"Sorry, a critical error occurred:\n\n```\n{traceback.format_exc()}\n```"
+                st.session_state.messages.append(AIMessage(content=error_message))
             
-            # ▼▼▼▼▼ 変更点: 入力形式を 'messages' のみに統一 ▼▼▼▼▼
-            agent_input = {"messages": st.session_state.messages}
+            # 処理が終わったら、処理中フラグを倒す
+            st.session_state.agent_is_thinking = False
             
-            # ▼▼▼▼▼ 変更点: ainvokeから同期的なinvokeに全面変更 ▼▼▼▼▼
-            response = agent_executor.invoke(agent_input, config)
+            # --- ここに10秒間の待機を挿入 ---
+            time.sleep(10)
+            
+            # UIを再描画して結果を表示
+            st.rerun()
+# ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
-            if response and "messages" in response:
-                st.session_state.messages = response["messages"]
-            else:
-                st.session_state.messages.append(AIMessage(content="Sorry, I received an unexpected response from the agent."))
+def aaa():
+    if prompt := st.chat_input("Ask me to research something..."):
+        # ユーザーのメッセージを現在の履歴に追加
+        st.session_state.messages.append(HumanMessage(content=prompt))
+        
+        with st.chat_message("user", avatar="👤"):
+            st.markdown(prompt)
 
-        except Exception:
-            error_message = f"Sorry, a critical error occurred:\n\n```\n{traceback.format_exc()}\n```"
-            st.session_state.messages.append(AIMessage(content=error_message))
-    
-    # 処理完了後にUIを再描画
-    st.rerun()
+        with st.spinner("🤖 Agent is processing... Please wait."):
+            try:
+                config = {"configurable": {"thread_id": st.session_state.thread_id}}
+                
+                # ▼▼▼▼▼ 変更点: 入力形式を 'messages' のみに統一 ▼▼▼▼▼
+                agent_input = {"messages": st.session_state.messages}
+                
+                # ▼▼▼▼▼ 変更点: ainvokeから同期的なinvokeに全面変更 ▼▼▼▼▼
+                response = agent_executor.invoke(agent_input, config)
+
+                if response and "messages" in response:
+                    st.session_state.messages = response["messages"]
+                else:
+                    st.session_state.messages.append(AIMessage(content="Sorry, I received an unexpected response from the agent."))
+
+            except Exception:
+                error_message = f"Sorry, a critical error occurred:\n\n```\n{traceback.format_exc()}\n```"
+                st.session_state.messages.append(AIMessage(content=error_message))
+        
+        # 処理完了後にUIを再描画
+        st.rerun()

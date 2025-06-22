@@ -86,12 +86,25 @@ def _run_mcp_tool_sync(tool_name: str, args_dict: Dict[str, Any]) -> str:
 
 # --- LangChainツール定義 (同期) ---
 
+discripsion1 = """
+google_search
+インターネット上の情報を検索する必要がある場合に使用します。
+ユーザーの質問に答えるために、時事問題、特定のトピック、製品、人物など、
+あらゆる事柄について最新の情報をウェブから検索し、関連ページのコンテンツを取得します。
+
+crawl_website
+特定のウェブサイトの構造や内容を詳細に調査する場合に使用します。
+指定されたURLからリンクを辿り、複数のページからテキスト、メールアドレス、電話番号を網羅的に収集します。
+
+
+"""
+
 @tool(args_schema=GoogleSearchArgs)
 def google_search(query: str, search_pages: Optional[int] = 1) -> str:
     """
-    インターネット上の情報を検索する必要がある場合に使用します。
-    ユーザーの質問に答えるために、時事問題、特定のトピック、製品、人物など、
-    あらゆる事柄について最新の情報をウェブから検索し、関連ページのコンテンツを取得します。
+ユーザーの質問に答えるための初期調査として、まずこのツールを使用する。
+広範なトピックについてウェブを検索し、概要、関連情報、そしてより詳細な情報源となるウェブサイトのURLを特定する。
+
     """
     args = {"query": query, "search_pages": search_pages}
     # Pydanticモデルの exclude_unset=True を使わないように引数を渡す
@@ -101,8 +114,9 @@ def google_search(query: str, search_pages: Optional[int] = 1) -> str:
 @tool(args_schema=CrawlWebsiteArgs)
 def crawl_website(url: str, selector: str = 'a', max_depth: Optional[int] = 1, main_content_only: Optional[bool] = False) -> str:
     """
-    特定のウェブサイトの構造や内容を詳細に調査する場合に使用します。
-    指定されたURLからリンクを辿り、複数のページからテキスト、メールアドレス、電話番号を網羅的に収集します。
+google_searchで見つけた特定のウェブサイトについて、より深く、詳細な情報を得るために使用する。
+指定されたURLのページ内容を直接読み取り、google_searchの結果では得られない具体的な情報を抽出する。
+指定されたURLからリンクを辿り、複数のページからテキスト、メールアドレス、電話番号を網羅的に収集します。
     """
     args = {"url": url, "selector": selector, "max_depth": max_depth, "main_content_only": main_content_only}
     validated_args = CrawlWebsiteArgs(**args).model_dump()
@@ -111,7 +125,7 @@ def crawl_website(url: str, selector: str = 'a', max_depth: Optional[int] = 1, m
 @tool(args_schema=GetGoogleAiSummaryArgs)
 def get_google_ai_summary(query: str) -> str:
     """
-    特定の検索クエリに対して、GoogleのAIがどのようなウェブサイトを情報源として要約を生成しているか、その参照元URLリストを調査する場合に使用します。
+    特定の検索クエリに対するGoogleのAI要約の「情報源」を調査したい、という特殊な場合にのみ使用する。
     """
     args = {"query": query}
     validated_args = GetGoogleAiSummaryArgs(**args).model_dump()
@@ -120,7 +134,7 @@ def get_google_ai_summary(query: str) -> str:
 @tool(args_schema=ScrapeLawPageArgs)
 def scrape_law_page(url: str, keyword: str) -> str:
     """
-    特定の法律や規則のウェブページから、指定されたキーワードが含まれる条文や関連箇所を正確に抜き出す場合に使用します。
+法律や規則のウェブページから、特定のキーワードを含む条文を正確に抜き出す、法務調査に特化したツール.
     """
     args = {"url": url, "keyword": keyword}
     validated_args = ScrapeLawPageArgs(**args).model_dump()
