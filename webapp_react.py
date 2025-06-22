@@ -43,16 +43,25 @@ def setup_agent():
 SYSTEM_INSTRUCTION = """
 あなたは、優秀なWeb調査アシスタントです。ユーザーの指示に基づき、与えられたツールを駆使して情報を収集し、要約して回答します。
 
-あなたの行動原則は以下の通りです:
+あなたの基本ワークフローと行動原則は以下の通りです:
+
+**基本ワークフロー:**
+1.  **一次調査 (google_search)**: まず、ユーザーの質問に関連する情報を `google_search` ツールを使って幅広く収集します。これにより、概要、関連キーワード、そして最も重要ないくつかのURLを特定します。
+2.  **二次調査 (crawl_website)**: 一次調査で見つかった**最も重要そうなURL**に対して、`crawl_website` ツールを使って詳細な情報を収集します。これにより、特定のウェブサイトのコンテンツを深く掘り下げます。
+3.  **情報統合と回答**: 上記の調査で得られたすべての情報を統合し、要約して、ユーザーに包括的な回答を生成します。
+
+**行動原則:**
 1.  **思考せよ (Thought)**: ユーザーの要求を分析し、タスクを達成するための計画を立てます。
 2.  **行動せよ (Action)**: 計画に基づき、利用可能なツールの中から最適なものを選択し、実行します。
 3.  **観察せよ (Observation)**: ツールの実行結果を注意深く観察します。
+    **重要**: もしツールの結果が `FATAL_ERROR:` という文字列で始まる場合は、そのエラーは回復不能です。**それ以上のツール使用を直ちに中止し**、そのエラー内容をユーザーに分かりやすく報告してください。
 4.  **反復せよ (Iteration)**: 観察結果が最終的な回答を生成するのに十分かどうかを判断します。
     - もし情報が不十分な場合や、ツールがエラーを返した場合は、諦めずに**計画を修正し、異なるツールや異なる引数で再度行動**します。例えば、検索クエリを変えたり、別のウェブサイトをクロールしたりします。
     - ユーザーに質問を投げかけ、調査の方向性を確認することも有効な手段です。
-5.  **回答せよ**: すべての情報が揃ったと判断した場合にのみ、収集した情報を統合し、ユーザーに最終的な回答を生成します。
+5.  **回答せよ**: すべての情報が揃った、あるいはFATAL_ERRORにより調査が続行不能になったと判断した場合にのみ、収集した情報を統合し、ユーザーに最終的な回答を生成します。
 
 常にこの「思考-行動-観察-反復」のサイクルを意識して、粘り強くタスクを遂行してください。
+このワークフローに従い、徹底的な調査を行ってください。
 """
 
 if "thread_id" not in st.session_state:
@@ -85,25 +94,52 @@ if len(st.session_state.messages) > 1:
     for msg in st.session_state.messages[1:]:
         if isinstance(msg, AIMessage):
             with st.chat_message("assistant", avatar="🤖"):
-                if msg.tool_calls:
-                     with st.status("🤔 Agent decided to use tools", expanded=False):
-                        st.json([dict(tc) for tc in msg.tool_calls])
-                if msg.content:
-                    st.markdown(msg.content)
+                # msg.content を安全に文字列に変換
+                content_str = ""
+                if isinstance(msg.content, str):
+                    content_str = msg.content
+                elif isinstance(msg.content, list):
+                    # リストの場合は、テキスト部分を結合して一つの文字列にする
+                    for part in msg.content:
+                        if isinstance(part, dict) and part.get("type") == "text":
+                            content_str += part.get("text", "")
+
+                # FATAL_ERRORの判定と表示
+                if content_str.strip().startswith("FATAL_ERROR:"):
+                    error_detail = content_str.replace("FATAL_ERROR:", "").strip()
+                    if "api usage limit exceeded" in error_detail.lower():
+                        st.error("APIリミットの上限(100回/月)に達しました。\n上限を超えて活用する場合は課金してください。")
+                    else:
+                        st.error(f"回復不能なエラーが発生しました: {error_detail}")
+                
+                # 通常のAIMessageの処理
+                else:
+                    if msg.tool_calls:
+                         with st.status("🤔 Agent decided to use tools", expanded=False):
+                            st.json([dict(tc) for tc in msg.tool_calls])
+                    if content_str:
+                        st.markdown(content_str)
+                # --- ここまでが修正箇所 ---
+
         elif isinstance(msg, HumanMessage):
             with st.chat_message("user", avatar="👤"):
                 st.markdown(msg.content)
         elif isinstance(msg, ToolMessage):
             with st.chat_message("tool", avatar="🛠️"):
+
+                # msg.content を安全に文字列に変換
+                content_str = str(msg.content) if msg.content is not None else ""
+
                 with st.expander(f"Tool Output (ID: {msg.tool_call_id[:8]}...)", expanded=False):
-                    is_error = str(msg.content).lower().startswith("error")
+                    is_error = content_str.lower().startswith("error") or content_str.lower().startswith("fatal_error:")
                     if is_error:
-                        st.error(f"Tool Error: {msg.content}")
+                        st.error(f"Tool Error: {content_str}")
                     else:
                         try:
-                            st.json(json.loads(msg.content))
+                            st.json(json.loads(content_str))
                         except json.JSONDecodeError:
-                            st.text(msg.content)
+                            st.text(content_str)
+                # --- ここまでが修正箇所 ---
 
 
 # --- 5. ユーザー入力とエージェント実行 (完全同期) ---

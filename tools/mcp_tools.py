@@ -36,10 +36,9 @@ class GoogleSearchArgs(BaseModel):
 def _run_mcp_tool_sync(tool_name: str, args_dict: Dict[str, Any]) -> str:
     """
     subprocessを同期的に使用してTypeScriptのクライアントスクリプトを実行する。
-    asyncioを完全に排除。
     """
     if not TSX_EXECUTABLE_PATH.is_file():
-        return f"Error: tsx executable not found at '{TSX_EXECUTABLE_PATH}'. Please run 'npm install' in the 'mcp-client-typescript' directory."
+        return f"Error: tsx executable not found at '{TSX_EXECUTABLE_PATH}'. Please run 'npm install' in 'mcp-client-typescript'."
     
     command = [
         str(TSX_EXECUTABLE_PATH),
@@ -49,37 +48,41 @@ def _run_mcp_tool_sync(tool_name: str, args_dict: Dict[str, Any]) -> str:
     ]
     
     try:
-        # subprocess.run を使用して同期的に実行
         result = subprocess.run(
             command,
             capture_output=True,
-            # ▼▼▼▼▼ この2行を修正・追加 ▼▼▼▼▼
             encoding='utf-8',
-            errors='ignore',  # デコードエラーを無視する
-            # ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
-            #text=True,
+            errors='ignore',
             timeout=EXECUTION_TIMEOUT,
             cwd=CLIENT_PROJECT_PATH,
-            check=False  # returncodeが0でなくても例外を発生させない
+            check=False
         )
 
         if result.returncode == 0:
-            return result.stdout.strip() or f"Tool '{tool_name}' returned no output. Stderr: {result.stderr.strip() or 'N/A'}"
+            output = result.stdout.strip()
+            try:
+                data = json.loads(output)
+                if isinstance(data, dict) and data.get("error") is True:
+                    error_msg = data.get("message", "Unknown error from client script.")
+                    if "api usage limit exceeded" in error_msg.lower():
+                        return f"FATAL_ERROR: {error_msg}"
+                    else:
+                        return f"Error from tool '{tool_name}': {error_msg}"
+            except json.JSONDecodeError:
+                pass # JSONでなければ正常な出力とみなす
+            return output or f"Tool '{tool_name}' returned no output."
         else:
             return (
                 f"Error executing tool '{tool_name}': Subprocess failed with exit code {result.returncode}\n"
-                f"Stderr: {result.stderr.strip() or 'N/A'}\n"
-                f"Stdout: {result.stdout.strip() or 'N/A'}"
+                f"Stderr: {result.stderr.strip() or 'N/A'}"
             )
             
     except subprocess.TimeoutExpired:
-        return f"Error executing tool '{tool_name}': Process timed out after {EXECUTION_TIMEOUT} seconds."
+        return f"Error: Tool '{tool_name}' timed out after {EXECUTION_TIMEOUT} seconds."
     except FileNotFoundError:
-        return f"Error: Command not found. Make sure '{TSX_EXECUTABLE_PATH}' is a valid path."
+        return f"Error: Command not found. Path: '{TSX_EXECUTABLE_PATH}'."
     except Exception as e:
-        # その他の予期せぬエラー
         return f"An unexpected Python error occurred in subprocess execution for '{tool_name}': {e}"
-
 
 # --- LangChainツール定義 (同期) ---
 
