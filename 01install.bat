@@ -1,25 +1,78 @@
 @echo off
 setlocal
 
-:: =================================================================
-:: â–  æ¦‚è¦
-:: ã“ã®ã‚¹ã‚¯ãƒªãƒ—ãƒˆã¯ã€ã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã€ã‚µãƒ¼ãƒãƒ¼ã€Pythonç’°å¢ƒã®
-:: ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã¨èµ·å‹•ã‚’è‡ªå‹•åŒ–ã—ã¾ã™ã€‚
-:: =================================================================
+:: =============================================================================
+:: ¡ ŠT—v
+:: ‚±‚ÌƒXƒNƒŠƒvƒg‚ÍAƒNƒ‰ƒCƒAƒ“ƒgAƒT[ƒo[APythonŠÂ‹«‚Ì
+:: ƒZƒbƒgƒAƒbƒv‚Æ‹N“®‚ğ©“®‰»‚µ‚Ü‚·B
+::
+:: ¡ ’ˆÓ
+:: ‚±‚Ìƒoƒbƒ`ƒtƒ@ƒCƒ‹‚Í•¶šƒR[ƒhuANSI (Shift_JIS)v‚Å•Û‘¶‚µ‚Ä‚­‚¾‚³‚¢B
+:: =============================================================================
 
 
-:: =================================================================
-:: â–  æº–å‚™ï¼šãƒãƒƒãƒãƒ•ã‚¡ã‚¤ãƒ«è‡ªèº«ã®å ´æ‰€ã‚’åŸºæº–ã«ã™ã‚‹
-:: ã“ã‚Œã«ã‚ˆã‚Šã€ã©ã“ã‹ã‚‰å®Ÿè¡Œã—ã¦ã‚‚æ­£ã—ãå‹•ä½œã—ã¾ã™ã€‚
-:: =================================================================
+:: =============================================================================
+:: ¡ €”õFƒoƒbƒ`ƒtƒ@ƒCƒ‹©g‚ÌêŠ‚ğŠî€‚É‚·‚é
+:: ‚±‚ê‚É‚æ‚èA‚Ç‚±‚©‚çÀs‚µ‚Ä‚à³‚µ‚­“®ì‚µ‚Ü‚·B
+:: =============================================================================
 cd /d "%~dp0"
 
 
 :: =================================================================
-:: â–  ã‚¹ãƒ†ãƒƒãƒ—1ï¼šã‚¯ãƒ©ã‚¤ã‚¢ãƒ³ãƒˆã‚µã‚¤ãƒ‰ã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—
+:: ¡ APIƒL[‚Ìƒ`ƒFƒbƒN (.envƒtƒ@ƒCƒ‹)
 :: =================================================================
 echo.
-echo [INFO] 1/4: Checking client-side dependencies (mcp-client-typescript)...
+echo [INFO] Checking for GOOGLE_API_KEY in .env file...
+
+:: .envƒtƒ@ƒCƒ‹‚ª‘¶İ‚µ‚È‚¢ê‡‚ÍƒGƒ‰[
+if not exist ".env" (
+    echo [WARNING] .env file not found.
+    echo           Please create it and set your GOOGLE_API_KEY.
+    goto :show_api_error
+)
+
+:: .env‚©‚çGOOGLE_API_KEY‚Ìs‚ğ“Ç‚İæ‚èA'='‚Å•ªŠ„‚µ‚ÄƒL[•”•ª‚ğFORƒ‹[ƒv‚Åó‚¯æ‚é
+set "API_KEY_VALUE="
+for /f "tokens=1,* delims==" %%a in ('findstr /b /c:"GOOGLE_API_KEY" ".env"') do (
+    set "API_KEY_VALUE=%%b"
+)
+
+:: ƒL[‚Ì’l‚ª‹ó‚©Aƒ_ƒuƒ‹ƒNƒH[ƒg‚¾‚¯‚Ìê‡‚ÍƒGƒ‰[
+if not defined API_KEY_VALUE (
+    goto :show_api_error
+)
+if "%API_KEY_VALUE%"=="''" (
+    goto :show_api_error
+)
+if "%API_KEY_VALUE%"=="" (
+    goto :show_api_error
+)
+
+echo      GOOGLE_API_KEY is set.
+goto :continue_script
+
+:show_api_error
+echo.
+echo [ERROR] GOOGLE_API_KEY is not set or empty in the .env file.
+echo         Please open the '.env' file and add your API key.
+echo         Example: GOOGLE_API_KEY="AIzaSy...YourKey...SyQ"
+echo.
+echo         Get your key from: https://aistudio.google.com/app/apikey
+echo.
+echo         Opening Google AI Studio in your browser...
+start https://aistudio.google.com/app/apikey
+goto :error_exit
+
+
+:continue_script
+:: ‚±‚Ìs‚ÍAƒ`ƒFƒbƒN‚ª¬Œ÷‚µ‚½ê‡‚ÉƒXƒNƒŠƒvƒg‚ğ‘±s‚³‚¹‚é‚½‚ß‚Ì‚à‚Ì‚Å‚·B
+
+
+:: =============================================================================
+:: ¡ ƒXƒeƒbƒv2FƒNƒ‰ƒCƒAƒ“ƒgƒTƒCƒh‚ÌƒZƒbƒgƒAƒbƒv
+:: =============================================================================
+echo.
+echo [INFO] 2/5: Checking client-side dependencies (mcp-client-typescript)...
 if not exist "mcp-client-typescript\node_modules" (
     echo      'node_modules' not found. Running npm install...
     cd mcp-client-typescript
@@ -34,11 +87,11 @@ if not exist "mcp-client-typescript\node_modules" (
 )
 
 
-:: =================================================================
-:: â–  ã‚¹ãƒ†ãƒƒãƒ—2ï¼šã‚µãƒ¼ãƒãƒ¼ã‚µã‚¤ãƒ‰ã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã¨èµ·å‹•
-:: =================================================================
+:: =============================================================================
+:: ¡ ƒXƒeƒbƒv3FƒT[ƒo[ƒTƒCƒh‚ÌƒZƒbƒgƒAƒbƒv‚Æ‹N“®
+:: =============================================================================
 echo.
-echo [INFO] 2/4: Checking server-side dependencies (mcp-server-typescript)...
+echo [INFO] 3/5: Checking server-side dependencies (mcp-server-typescript)...
 if not exist "mcp-server-typescript\node_modules" (
     echo      'node_modules' not found. Running npm install...
     cd mcp-server-typescript
@@ -58,11 +111,11 @@ start "MCP Server" npm run dev
 cd ..
 
 
-:: =================================================================
-:: â–  ã‚¹ãƒ†ãƒƒãƒ—3ï¼šã‚¹ã‚¯ãƒ¬ã‚¤ãƒ”ãƒ³ã‚°ã‚¢ãƒ—ãƒªã®èµ·å‹•
-:: =================================================================
+:: =============================================================================
+:: ¡ ƒXƒeƒbƒv4FƒXƒNƒŒƒCƒsƒ“ƒOƒAƒvƒŠ‚Ì‹N“®
+:: =============================================================================
 echo.
-echo [INFO] 3/4: Starting YourScrapingApp.exe...
+echo [INFO] 4/5: Starting YourScrapingApp.exe...
 if exist "mcp-server-typescript\bin\YourScrapingApp.exe" (
     cd mcp-server-typescript\bin
     start "Scraping App" YourScrapingApp.exe
@@ -72,13 +125,13 @@ if exist "mcp-server-typescript\bin\YourScrapingApp.exe" (
 )
 
 
-:: =================================================================
-:: â–  ã‚¹ãƒ†ãƒƒãƒ—4ï¼šPythonç’°å¢ƒã®ã‚»ãƒƒãƒˆã‚¢ãƒƒãƒ—ã¨Streamlitã‚¢ãƒ—ãƒªã®èµ·å‹•
-:: =================================================================
+:: =============================================================================
+:: ¡ ƒXƒeƒbƒv5FPythonŠÂ‹«‚ÌƒZƒbƒgƒAƒbƒv‚ÆStreamlitƒAƒvƒŠ‚Ì‹N“®
+:: =============================================================================
 echo.
-echo [INFO] 4/4: Setting up and activating Python environment...
+echo [INFO] 5/5: Setting up and activating Python environment...
 
-:: ä»®æƒ³ç’°å¢ƒãƒ•ã‚©ãƒ«ãƒ€ 'venv' ãŒãªã‘ã‚Œã°ä½œæˆã™ã‚‹
+:: ‰¼‘zŠÂ‹«ƒtƒHƒ‹ƒ_ 'venv' ‚ª‚È‚¯‚ê‚Îì¬‚·‚é
 if not exist "venv" (
     echo      Python virtual environment 'venv' not found. Creating...
     python -m venv venv
@@ -88,10 +141,10 @@ if not exist "venv" (
     )
 )
 
-:: ä»®æƒ³ç’°å¢ƒã‚’ã‚¢ã‚¯ãƒ†ã‚£ãƒ™ãƒ¼ãƒˆ
+:: ‰¼‘zŠÂ‹«‚ğƒAƒNƒeƒBƒx[ƒg
 call "venv\Scripts\activate.bat"
 
-:: å¿…è¦ãªãƒ‘ãƒƒã‚±ãƒ¼ã‚¸ã‚’ã‚¤ãƒ³ã‚¹ãƒˆãƒ¼ãƒ«/æ›´æ–°
+:: •K—v‚ÈƒpƒbƒP[ƒW‚ğƒCƒ“ƒXƒg[ƒ‹/XV
 echo      Installing/updating Python packages from requirements.txt...
 call pip install -r requirements.txt
 if %errorlevel% neq 0 (
@@ -99,24 +152,36 @@ if %errorlevel% neq 0 (
     goto :error_exit
 )
 
-:: Streamlitã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ã‚’èµ·å‹•
+:: StreamlitƒAƒvƒŠƒP[ƒVƒ‡ƒ“‚ğ‹N“®
 echo      Starting Streamlit application...
 start "Streamlit WebApp" streamlit run webapp_react.py
 
 
-:: =================================================================
-:: â–  å®Œäº†å‡¦ç†
-:: =================================================================
+:: =============================================================================
+:: ¡ Š®—¹ˆ—
+:: =============================================================================
 echo.
 echo [SUCCESS] All processes have been started successfully.
-echo This window will close in 10 seconds...
-timeout /t 10 >nul
+echo This window can be closed.
 goto :eof
 
 
-:: =================================================================
-:: â–  ã‚¨ãƒ©ãƒ¼ç™ºç”Ÿæ™‚ã®çµ‚äº†å‡¦ç†
-:: =================================================================
+:: =============================================================================
+:: ¡ ƒGƒ‰[ˆ——p‚ÌƒTƒuƒ‹[ƒ`ƒ“
+:: =============================================================================
+:show_api_error
+echo.
+echo [ERROR] GOOGLE_API_KEY is not set or empty in the .env file.
+echo         Please open the '.env' file and add your API key.
+echo         Example: GOOGLE_API_KEY="AIzaSy...YourKey...SyQ"
+echo.
+echo         Get your key from: https://aistudio.google.com/app/apikey
+echo.
+echo         Opening Google AI Studio in your browser...
+start https://aistudio.google.com/app/apikey
+goto :error_exit
+
+
 :error_exit
 echo.
 echo [FATAL] An error occurred. Please check the messages above.
