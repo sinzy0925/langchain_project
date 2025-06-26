@@ -1,3 +1,1002 @@
+以下は、アプリの詳細コード群です。
+詳細に理解してください。
+このアプリ群の詳細をgemini cli に伝えるために　README.md　を作成します
+README.mdに記載する内容を詳細に教えて
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: index.html
+- 内容:
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Web Agent - あなた専属のAIリサーチアシスタント</title>
+
+    <style>
+        :root {
+            --primary-color: #4a69bd; /* 少し落ち着いた青 */
+            --secondary-color: #1abc9c; /* アクセントの緑 */
+            --background-color: #f8f9fa;
+            --text-color: #34495e;
+            --card-bg-color: #ffffff;
+            --light-gray: #ecf0f1;
+        }
+    
+        body {
+            font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
+            line-height: 1.8;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+    
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+    
+        .header {
+            text-align: center;
+            padding: 80px 20px;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+        }
+    
+        .header h1 {
+            margin: 0;
+            font-size: 3.2rem;
+            font-weight: 700;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+    
+        .header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            margin-top: 15px;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    
+        .section {
+            padding: 80px 20px;
+        }
+        
+        h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 50px;
+            position: relative;
+        }
+    
+        h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--secondary-color);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+    
+        /* ▼▼▼▼▼ ここからが変更・追加箇所 ▼▼▼▼▼ */
+        .concept-flow {
+            display: flex;
+            flex-wrap: wrap; /* スマホ表示などで折り返すように */
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 50px;
+        }
+    
+        .concept-flow .step {
+            background-color: #ffffff;
+            border: 2px solid var(--light-gray);
+            border-radius: 12px; /* 角を丸くする */
+            padding: 15px 25px;
+            text-align: center;
+            font-weight: 600;
+            color: var(--primary-color);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+    
+        .concept-flow .step:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.08);
+        }
+    
+        .concept-flow .step .icon {
+            font-size: 1.5rem;
+        }
+    
+        .concept-flow .arrow {
+            font-size: 2rem;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+        /* ▲▲▲▲▲ ここまでが変更・追加箇所 ▲▲▲▲▲ */
+    
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+        }
+    
+        .feature-item {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-top: 4px solid var(--secondary-color);
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+    
+        .feature-item-icon {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+    
+        .feature-item h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+    
+        .pricing-section {
+            background-color: var(--light-gray);
+        }
+    
+        .pricing-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+    
+        .pricing-plan {
+            background-color: var(--card-bg-color);
+            border-radius: 10px;
+            padding: 40px;
+            text-align: center;
+            width: 320px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.07);
+            border: 2px solid transparent;
+            transition: transform 0.3s;
+        }
+        
+        .pricing-plan:hover {
+            transform: scale(1.03);
+        }
+    
+        .pricing-plan h3 {
+            font-size: 1.6rem;
+            color: var(--primary-color);
+        }
+    
+        .price {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 20px 0;
+        }
+        
+        .price .unit {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+        
+        .pricing-plan.highlight .price {
+             color: var(--secondary-color);
+        }
+    
+        .pricing-plan ul {
+            list-style: none;
+            padding: 0;
+            margin: 25px 0;
+            text-align: left;
+        }
+    
+        .pricing-plan li {
+            padding: 10px 0;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .pricing-plan li::before {
+            content: '✔';
+            color: var(--secondary-color);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+    
+        .info-box {
+            background-color: var(--card-bg-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px 25px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+    
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: #2c3e50;
+            color: rgba(255, 255, 255, 0.8);
+        }
+    
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+    
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>AI Web Agent</h1>
+        <p>あなたの質問から、AIが自律的にWebを調査し、<br>最適な答えを導き出すリサーチアシスタントです。</p>
+    </header>
+
+    <div class="container">
+
+        <section class="section">
+            <h2>AI Web Agent とは？</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 50px; font-size: 1.1rem;">
+                AI Web Agentは、単に質問に答えるだけのチャットボットではありません。あなたが与えた調査テーマに基づき、AIエージェントが自ら思考し、計画を立て、Web検索やサイト分析を粘り強く繰り返すことで、人間のように深いリサーチを実行します。
+            </p>
+        
+            <!-- ▼▼▼▼▼ ここからが変更箇所 ▼▼▼▼▼ -->
+            <div class="concept-flow">
+                <div class="step">
+                    <span class="icon">💬</span>
+                    <span>① 指示</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="step">
+                    <span class="icon">🤔</span>
+                    <span>② AIが思考・計画</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="step">
+                    <span class="icon">🔍</span>
+                    <span>③ Web調査・分析</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="step">
+                    <span class="icon">💡</span>
+                    <span>④ 自己評価・深掘り</span>
+                </div>
+                <div class="arrow">→</div>
+                <div class="step">
+                    <span class="icon">✅</span>
+                    <span>⑤ 最終回答</span>
+                </div>
+            </div>
+            <!-- ▲▲▲▲▲ ここまでが変更箇所 ▲▲▲▲▲ -->
+        
+        </section>
+        <section class="section" style="background-color: #fff; border-radius: 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.05);">
+            <h2>エージェントが利用する強力なツール群</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-item-icon">🔍</div>
+                    <h3>自律型Google検索</h3>
+                    <p>AIが最適なキーワードを考え、検索を実行。結果を分析し、有望な情報源を見つけ出します。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">📄</div>
+                    <h3>深層サイトクローリング</h3>
+                    <p>見つけたサイトを深く読み込み、必要な情報を抽出。PDFやOffice文書の中身まで見逃しません。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">💡</div>
+                    <h3>自己評価と改善ループ</h3>
+                    <p>一度の結果で満足せず、「まだ情報が足りないか？」と自問自答。納得のいく答えが得られるまで調査を繰り返します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section pricing-section">
+            <h2>料金プラン</h2>
+            <p style="text-align: center; max-width: 700px; margin: 0 auto 50px;">
+                まずは無料でお試しください。より高度で大規模なリサーチが必要になった場合のみ、柔軟なプランでご利用を継続できます。
+            </p>
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <h3>無料プラン</h3>
+                    <div class="price">¥0<span class="unit">/月</span></div>
+                    <ul>
+                        <li>AIエージェントの利用 **毎月100回** まで</li>
+                        <li>すべての基本リサーチ機能</li>
+                        <li>月が変わると利用回数は自動リセット</li>
+                    </ul>
+                </div>
+                <div class="pricing-plan highlight">
+                    <h3>追加クレジット<br>（買い切り）</h3>
+                    <div class="price">¥500<span class="unit">から</span></div>
+                    <ul>
+                        <li><strong>100回分 / 500円</strong></li>
+                        <li><strong>500回分 / 2,000円</strong></li>
+                        <li>無料枠を使い切った後も継続利用可能</li>
+                        <li style="font-weight: bold;">購入分は無期限で繰り越し可能</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>ポリシー情報</h2>
+            <div class="info-box">
+                <p><strong>返品・返金ポリシー:</strong> ご購入いただいた追加クレジットはデジタルコンテンツの性質上、理由の如何を問わず、購入後の返品・返金は一切お受けできません。ご購入前にサービス内容を十分にご確認ください。</p>
+            </div>
+            <div class="info-box">
+                 <p><strong>キャンセルポリシー:</strong> 本サービスは都度購入（買い切り）モデルです。一度完了した購入手続きのキャンセルはできません。</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p><strong>AI Web Agent (事業名: Very Glad)</strong></p>
+        <p>カスタマーサービス連絡先: <a href="mailto:info@veryglad.net">info＠veryglad.net</a></p>
+        <p>© 2025 Very Glad. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: list_gemini_models.py
+- 内容:
+import google.generativeai as genai
+
+try:
+    # Gemini APIキーを設定 (ここにあなたのAPIキーを設定してください)
+    GENAI_API_KEY = "AIzaSyDO4SSiRMJOBw6LHvCskpSOLtT7E4YDS3M"
+
+    # Gemini APIキーを設定
+    genai.configure(api_key=GENAI_API_KEY)
+
+    # 利用可能なモデルの一覧を取得
+    text= ''
+    for m in genai.list_models():
+        if 'generateContent' in m.supported_generation_methods:
+            text += (f"モデル名: {m.name}\n")
+            text += (f"  説明: {m.description}\n")
+            text += (f"  入力トークン上限: {m.input_token_limit}\n")
+            text += (f"  出力トークン上限: {m.output_token_limit}\n")
+            text += ("---\n\n\n")
+
+    print(text)
+    with open('list_gemini_models.txt', "a", encoding="utf-8") as f:
+        f.write(text)
+
+
+except Exception as e:
+    print(f"エラーが発生しました: {e}")
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: list_gemini_models.txt
+- 内容:
+モデル名: models/gemini-1.0-pro-vision-latest
+  説明: The original Gemini 1.0 Pro Vision model version which was optimized for image understanding. Gemini 1.0 Pro Vision was deprecated on July 12, 2024. Move to a newer Gemini version.
+  入力トークン上限: 12288
+  出力トークン上限: 4096
+---
+
+
+モデル名: models/gemini-pro-vision
+  説明: The original Gemini 1.0 Pro Vision model version which was optimized for image understanding. Gemini 1.0 Pro Vision was deprecated on July 12, 2024. Move to a newer Gemini version.
+  入力トークン上限: 12288
+  出力トークン上限: 4096
+---
+
+
+モデル名: models/gemini-1.5-pro-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-pro-002
+  説明: Stable version of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens, released in September of 2024.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-pro
+  説明: Stable version of Gemini 1.5 Pro, our mid-size multimodal model that supports up to 2 million tokens, released in May of 2024.
+  入力トークン上限: 2000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash
+  説明: Alias that points to the most recent stable version of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-002
+  説明: Stable version of Gemini 1.5 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in September of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b
+  説明: Stable version of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b-001
+  説明: Stable version of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-1.5-flash-8b-latest
+  説明: Alias that points to the most recent production (non-experimental) release of Gemini 1.5 Flash-8B, our smallest and most cost effective Flash model, released in October of 2024.
+  入力トークン上限: 1000000
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.5-pro-exp-03-25
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-03-25
+  説明: Gemini 2.5 Pro Preview 03-25
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-04-17
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-05-20
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash
+  説明: Stable version of Gemini 2.5 Flash, our mid-size multimodal model that supports up to 1 million tokens, released in June of 2025.
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-04-17-thinking
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-lite-preview-06-17
+  説明: Preview release (June 11th, 2025) of Gemini 2.5 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-05-06
+  説明: Preview release (May 6th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-06-05
+  説明: Preview release (June 5th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-pro
+  説明: Stable release (June 17th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-exp
+  説明: Gemini 2.0 Flash Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash
+  説明: Gemini 2.0 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-001
+  説明: Stable version of Gemini 2.0 Flash, our fast and versatile multimodal model for scaling across diverse tasks, released in January of 2025.
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-exp-image-generation
+  説明: Gemini 2.0 Flash (Image Generation) Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-001
+  説明: Stable version of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite
+  説明: Gemini 2.0 Flash-Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-preview-image-generation
+  説明: Gemini 2.0 Flash Preview Image Generation
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-preview-02-05
+  説明: Preview release (February 5th, 2025) of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-flash-lite-preview
+  説明: Preview release (February 5th, 2025) of Gemini 2.0 Flash Lite
+  入力トークン上限: 1048576
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemini-2.0-pro-exp
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-pro-exp-02-05
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-exp-1206
+  説明: Experimental release (March 25th, 2025) of Gemini 2.5 Pro
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp-01-21
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.0-flash-thinking-exp-1219
+  説明: Preview release (April 17th, 2025) of Gemini 2.5 Flash
+  入力トークン上限: 1048576
+  出力トークン上限: 65536
+---
+
+
+モデル名: models/gemini-2.5-flash-preview-tts
+  説明: Gemini 2.5 Flash Preview TTS
+  入力トークン上限: 8192
+  出力トークン上限: 16384
+---
+
+
+モデル名: models/gemini-2.5-pro-preview-tts
+  説明: Gemini 2.5 Pro Preview TTS
+  入力トークン上限: 8192
+  出力トークン上限: 16384
+---
+
+
+モデル名: models/learnlm-2.0-flash-experimental
+  説明: LearnLM 2.0 Flash Experimental
+  入力トークン上限: 1048576
+  出力トークン上限: 32768
+---
+
+
+モデル名: models/gemma-3-1b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-4b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-12b-it
+  説明: 
+  入力トークン上限: 32768
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3-27b-it
+  説明: 
+  入力トークン上限: 131072
+  出力トークン上限: 8192
+---
+
+
+モデル名: models/gemma-3n-e4b-it
+  説明: 
+  入力トークン上限: 8192
+  出力トークン上限: 2048
+---
+
+
+
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: my-website.html
+- 内容:
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourScrapingApp - 高機能データ収集ツール</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg-color: #ffffff;
+            --light-gray: #ecf0f1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .section {
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .feature-item {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-item-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pricing-section {
+            background-color: var(--light-gray);
+        }
+
+        .pricing-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-plan {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+        }
+        
+        .pricing-plan.highlight {
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .pricing-plan h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin: 15px 0;
+        }
+        
+        .price .unit {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        .pricing-plan ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .pricing-plan li {
+            padding: 8px 0;
+        }
+
+        .info-box {
+            background-color: var(--card-bg-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 5px;
+            max-width: 700px;
+        }
+        
+        .info-box p {
+            margin: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>YourScrapingApp</h1>
+        <p>インテリジェントなデータ収集を、誰でも簡単に。</p>
+    </header>
+
+    <div class="container">
+
+        <section class="section">
+            <h2>できること</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-item-icon">🌐</div>
+                    <h3>多機能ウェブクローラー</h3>
+                    <p>ウェブサイトを自動で巡回し、必要な情報を収集。PDFやOffice文書など、リンク先のファイル内容まで解析します。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">🔍</div>
+                    <h3>高度な検索エンジン連携</h3>
+                    <p>Google検索結果やAIによる要約から、関連性の高い情報を効率的に収集。リサーチ業務を大幅に加速させます。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">⚖️</div>
+                    <h3>専門サイト特化スクレイパー</h3>
+                    <p>法令サイトや医薬品情報サイトなど、複雑な構造を持つ専門サイトからでも、構造を維持したまま正確にデータを抽出します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section pricing-section">
+            <h2>料金プラン</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 40px;">
+                まずは無料でお試しください。より多くのデータ収集が必要になった場合のみ、柔軟なプランでご利用を継続できます。
+            </p>
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <h3>無料プラン</h3>
+                    <div class="price">¥0<span class="unit">/月</span></div>
+                    <ul>
+                        <li><strong>毎月100回</strong>まで利用可能</li>
+                        <li>全ての基本機能を利用可能</li>
+                        <li>月が変わると利用回数はリセット</li>
+                        <li>まずはこちらから</li>
+                    </ul>
+                </div>
+                <div class="pricing-plan highlight">
+                    <h3>追加クレジット購入<br>（買い切り）</h3>
+                    <div class="price">¥500<span class="unit">から</span></div>
+                    <ul>
+                        <li><strong>100回 / 500円</strong></li>
+                        <li><strong>500回 / 2,000円</strong></li>
+                        <li>無料枠を使い切った方向け</li>
+                        <li style="font-weight: bold; color: var(--secondary-color);">購入分は翌月以降も繰り越し可能</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>ポリシー</h2>
+            <div class="info-box">
+                <p><strong>返金ポリシー:</strong> ご購入いただいた追加クレジット（デジタルコンテンツ）の性質上、原則として返金は行っておりません。予めご了承ください。</p>
+            </div>
+            <div class="info-box">
+                 <p><strong>キャンセルについて:</strong> 都度購入（買い切り）モデルのため、購入後のキャンセルはできません。</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p><strong>YourScrapingApp</strong></p>
+        <p>カスタマーサービス連絡先: <a href="mailto:your-support-email@example.com">your-support-email@example.com</a></p>
+        <p>© 2024 Your Business Name. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: README.MD
+- 内容:
+# LangChain アプリへようこそ
+
+
 
 ---
 
@@ -76,6 +1075,48 @@ def setup_agent():
     
     return agent_executor
 
+def test_get_system_instruction() -> str:
+    """
+    現在日時を含むシステムプロンプトを生成する。
+    """
+    # 日本標準時(JST, UTC+9)を取得
+    jst = timezone(timedelta(hours=+9), 'JST')
+    now = datetime.now(jst)
+    current_date_str = now.strftime('%Y年%m月%d日 %H:%M')
+
+    return f"""
+あなたは、極めて優秀で洞察力に富んだWeb調査の専門家です。あなたの目的は、ユーザーの質問に対し、表層的な情報だけでなく、複数の情報源を統合した質の高い、深い回答を提供することです。
+
+**現在のあなたがいる日時は {current_date_str} です。** この情報を常に念頭に置き、最新の情報を基に回答してください。
+
+**高品質な回答を生成するための思考フレームワーク:**
+# **重要 (Important):** どれほど難しい要望でも、以下の思考を繰り返せば、必ずユーザーが感動する回答を得られますので、諦めずに作業してください。
+
+1.  **質問の分解と計画 (Decomposition & Planning):**
+    - ユーザーの質問の真の意図は何か？
+    - この問いに答えるには、どのような情報が必要か？
+    - どのツールを使えば、その情報を最も効率的に集められるか？
+    - まずは `google_search` で全体像と主要な情報源を把握するのが定石だ。
+
+2.  **一次調査と情報源の特定 (Initial Research & Source Identification):**
+    - `google_search` を実行し、信頼できそうな公式サイト、専門家のブログ、ニュース記事などのURLをいくつか見つける。
+    - この時点で答えが完全に得られたと思っても、それは表面的な情報かもしれない。より信頼性の高い回答のためには、情報源の一次情報にあたることが重要だ。
+
+3.  **深掘り調査 (Deep Dive):**
+    - 一次調査で見つけたURLの中から、最も有益と思われるものを選び、**`crawl_website` ツールを使ってそのページの内容を直接調査する。**
+    - このステップを踏むことで、あなたの回答は他の誰にも真似できない、独自の価値を持つものになる。
+
+4.  **統合と結論 (Synthesis & Conclusion):**
+    - `google_search` の結果と `crawl_website` の結果を組み合わせ、矛盾がないか確認し、情報を統合する。
+    - 複数の視点からの情報を基に、ユーザーにとって最も価値のある結論を導き出し、分かりやすく要約して提示する。
+
+**エラーへの対処:**
+- ツールが `FATAL_ERROR:` を返した場合、それは回復不能な問題です。調査を中止し、その旨を丁寧に報告してください。
+- それ以外のエラーの場合は、クエリを変えるなど、別のアプローチを試みてください。
+
+# **重要 (Important):** どれほど難しい要望でも、以下の思考を繰り返せば、必ずユーザーが感動する回答を得られますので、諦めずに作業してください。
+このフレームワークに従い、ユーザーが感動するような、プロフェッショナルな調査と回答を提供してください。
+"""
 
 
 def get_system_instruction() -> str:
@@ -289,6 +1330,130 @@ def aaa():
         
         # 処理完了後にUIを再描画
         st.rerun()
+
+
+---
+
+
+- フォルダ名: .
+- ファイル名: セキュリティ・チェックリストに基づく対策措置状況申告書.txt
+- 内容:
+セキュリティ・チェックリストに基づく対策措置状況申告書
+
+クレジット取引セキュリティ対策協議会が策定した「セキュリティ・チェックリストに基づく対策措置状況申告書」の項目にお答えください。詳細については、こちらをご参照ください。
+
+システム未構築の場合は、各セキュリティ対策の項目について、構築完了した時点で充足することを前提に申告してください。
+
+導入する方法について詳細をお知らせください
+顧客はどのように決済を行いますか？
+
+Stripe Payment Links または Stripe Invoicing のみ
+
+その他 (例えば、Stripe Checkout や Payment Element)
+
+よくわからない
+
+商品やサービスをオンラインで販売していますか？
+
+はい
+
+いいえ
+
+1. 管理者画面のアクセス制限と管理者の ID / PW 管理
+管理者のアクセス可能な IP アドレスを制限する。IP アドレスを制限できない場合は管理画面にベーシック認証等のアクセス制限を設ける。
+
+はい
+パスワードの使用に加え、IP アドレスなどのメカニズム (基本的な認証など) を利用するアクセスの制限が必要です。カードデータを保存するかどうかにかかわりなく、管理者アカウントが付与されている加盟店はすべてこの要件に対応する必要があります。
+取得されたアカウントを不正使用されないよう二段階認証または二要素認証を採用する。
+
+はい
+管理者画面のログインフォームでは、アカウントロック機能を有効にし、10 回以下のログイン失敗でアカウントをロックする。
+
+はい
+2. データディレクトリの露見に伴う設定不備への対策
+公開ディレクトリには、重要なファイルを配置しない。
+特定のディレクトリを非公開にする。公開ディレクトリ以外に重要なファイルを配置する。
+
+はい
+重要なファイルには、顧客データ、支払いデータ、アクセスログなどが含まれます。
+Web サーバや Web アプリケーションによりアップロード可能な拡張子やファイルを制限する等の設定を行う。
+
+はい
+3. Web アプリケーションの脆弱性対策
+脆弱性診断またはペネトレーションテストを定期的に実施し、必要な修正対応を行う。
+
+はい
+SQL インジェクションの脆弱性やクロスサイト・スクリプティングの脆弱性対策を行う。
+例えば、最新のプラグインの使用（当該脆弱性が無いものが望ましい）やソフトウェアのバージョンアップを行う。
+
+はい
+Web アプリケーションを開発またはカスタマイズされている場合には、セキュアコーディング済みであるか、ソースコードレビューを行い確認する。その際は、入力フォームの入力値チェックも行う。
+
+はい
+4. マルウェア対策としてのウイルス対策ソフトの導入、運用
+マルウェア検知 / 除去などの対策としてウイルス対策ソフトを導入して、シグネチャーの更新や定期的なフルスキャンなどを行う。
+
+はい
+5. 悪質な有効性確認、クレジットマスターへの対策
+悪質な有効性確認、クレジットマスターに対して、セキュリティ・チェックリストに記載の対策を 1 つ以上実施している。
+海外からの攻撃が非常に多いため「不審なIPアドレスからのアクセス制限」を行う。
+有効なカード会員データの漏えい対策として「同一アカウントからの入力制限」「エラー時に、エラー内容が分からないようにエラー内容を非表示」にする。
+EMV 3-D セキュアや SMS 通知など本人確認ができる対策を行う。
+有効性確認の回数制限を設けるなどの対策を行う。
+
+はい
+Stripe は、さまざまな要素とデータに従って、カードの有効性の確認可能回数を自動的に制限します。このため、Stripe で処理される支払いの場合、不正なカードテスティングへの対処として一覧に示されたセキュリティ対策を 1 つ以上導入することで対応できます。
+6. 不正ログイン対策
+各項目から少なくとも 1 つを実装する必要があります。
+会員登録時
+
+不審な IP アドレスからのアクセス制限
+
+二要素認証等による本人確認
+
+会員登録時の個人情報確認
+(氏名・住所・電話番号・メールアドレス等)
+
+不正検知システム (Fraud サービス)
+
+該当なし: 会員のログイン機能はありません
+
+アカウントの登録がユーザーに要求されない場合でも、配送などを目的として名前、メールアドレス、住所または他の個人データの入力を求められる場合は、このセクションの 1 つ以上の手段を実装する必要があります。
+ログイン認証時
+
+不審な IP アドレスからのアクセス制限
+
+二要素認証等による本人確認
+
+ログイン試行回数の制限強化 (アカウントパスワードクラッキングの対応)
+
+ログイン時のメールや SMS 通知、スロットリング等
+
+指紋認証等
+
+該当なし: 会員のログイン機能はありません
+
+属性変更時
+
+不審な IP アドレスからのアクセス制限
+
+二要素認証等による本人確認
+
+不正検知システム (Fraud サービス)
+
+デバイスフィンガープリント等
+
+該当なし: 会員のログイン機能はありません
+
+委託先情報
+貴社に代わってどなたがセキュリティ対策を実行しますか？
+
+従業員
+
+委託先企業
+
+送信
+後で続けるために保存
 
 
 ---
