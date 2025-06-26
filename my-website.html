@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YourScrapingApp - 高機能データ収集ツール</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --background-color: #f4f7f6;
+            --text-color: #333;
+            --card-bg-color: #ffffff;
+            --light-gray: #ecf0f1;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.7;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            padding: 60px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            border-bottom: 5px solid var(--secondary-color);
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 2.8rem;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            margin-top: 10px;
+        }
+
+        .section {
+            padding: 60px 20px;
+            border-bottom: 1px solid var(--light-gray);
+        }
+        
+        .section:last-child {
+            border-bottom: none;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 2.2rem;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            text-align: center;
+        }
+
+        .feature-item {
+            background-color: var(--card-bg-color);
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .feature-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+
+        .feature-item-icon {
+            font-size: 3rem;
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+        .feature-item h3 {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        .pricing-section {
+            background-color: var(--light-gray);
+        }
+
+        .pricing-grid {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .pricing-plan {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            width: 300px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            border: 2px solid transparent;
+        }
+        
+        .pricing-plan.highlight {
+            border-color: var(--secondary-color);
+            transform: scale(1.05);
+        }
+
+        .pricing-plan h3 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+
+        .price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin: 15px 0;
+        }
+        
+        .price .unit {
+            font-size: 1rem;
+            font-weight: normal;
+        }
+
+        .pricing-plan ul {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .pricing-plan li {
+            padding: 8px 0;
+        }
+
+        .info-box {
+            background-color: var(--card-bg-color);
+            border-left: 5px solid var(--secondary-color);
+            padding: 20px;
+            margin: 20px auto;
+            border-radius: 5px;
+            max-width: 700px;
+        }
+        
+        .info-box p {
+            margin: 0;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 40px 20px;
+            background-color: var(--primary-color);
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer p {
+            margin: 5px 0;
+        }
+        
+        .footer a {
+            color: white;
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <header class="header">
+        <h1>YourScrapingApp</h1>
+        <p>インテリジェントなデータ収集を、誰でも簡単に。</p>
+    </header>
+
+    <div class="container">
+
+        <section class="section">
+            <h2>できること</h2>
+            <div class="features-grid">
+                <div class="feature-item">
+                    <div class="feature-item-icon">🌐</div>
+                    <h3>多機能ウェブクローラー</h3>
+                    <p>ウェブサイトを自動で巡回し、必要な情報を収集。PDFやOffice文書など、リンク先のファイル内容まで解析します。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">🔍</div>
+                    <h3>高度な検索エンジン連携</h3>
+                    <p>Google検索結果やAIによる要約から、関連性の高い情報を効率的に収集。リサーチ業務を大幅に加速させます。</p>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-item-icon">⚖️</div>
+                    <h3>専門サイト特化スクレイパー</h3>
+                    <p>法令サイトや医薬品情報サイトなど、複雑な構造を持つ専門サイトからでも、構造を維持したまま正確にデータを抽出します。</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="section pricing-section">
+            <h2>料金プラン</h2>
+            <p style="text-align: center; max-width: 600px; margin: 0 auto 40px;">
+                まずは無料でお試しください。より多くのデータ収集が必要になった場合のみ、柔軟なプランでご利用を継続できます。
+            </p>
+            <div class="pricing-grid">
+                <div class="pricing-plan">
+                    <h3>無料プラン</h3>
+                    <div class="price">¥0<span class="unit">/月</span></div>
+                    <ul>
+                        <li><strong>毎月100回</strong>まで利用可能</li>
+                        <li>全ての基本機能を利用可能</li>
+                        <li>月が変わると利用回数はリセット</li>
+                        <li>まずはこちらから</li>
+                    </ul>
+                </div>
+                <div class="pricing-plan highlight">
+                    <h3>追加クレジット購入<br>（買い切り）</h3>
+                    <div class="price">¥500<span class="unit">から</span></div>
+                    <ul>
+                        <li><strong>100回 / 500円</strong></li>
+                        <li><strong>500回 / 2,000円</strong></li>
+                        <li>無料枠を使い切った方向け</li>
+                        <li style="font-weight: bold; color: var(--secondary-color);">購入分は翌月以降も繰り越し可能</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>ポリシー</h2>
+            <div class="info-box">
+                <p><strong>返金ポリシー:</strong> ご購入いただいた追加クレジット（デジタルコンテンツ）の性質上、原則として返金は行っておりません。予めご了承ください。</p>
+            </div>
+            <div class="info-box">
+                 <p><strong>キャンセルについて:</strong> 都度購入（買い切り）モデルのため、購入後のキャンセルはできません。</p>
+            </div>
+        </section>
+
+    </div>
+
+    <footer class="footer">
+        <p><strong>YourScrapingApp</strong></p>
+        <p>カスタマーサービス連絡先: <a href="mailto:your-support-email@example.com">your-support-email@example.com</a></p>
+        <p>© 2024 Your Business Name. All Rights Reserved.</p>
+    </footer>
+
+</body>
+</html>
