@@ -7,3 +7,4 @@ bup/
 coverage
 .DS_Store
 tools/__pycache__/
+mcp-server-typescript/bin/

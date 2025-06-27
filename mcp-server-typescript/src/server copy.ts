@@ -1,4 +1,4 @@
-// scraping-mcp-server/src/server.ts
+// mcp-server-typescript/src/server.ts
 
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";

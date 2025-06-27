@@ -1,7 +1,7 @@
 {
     "name": "mcp-client-typescript",
     "version": "0.1.0",
-    "description": "A TypeScript client for interacting with MCP servers, initially tailored for scraping-mcp-server.",
+    "description": "A TypeScript client for interacting with MCP servers, initially tailored for mcp-server-typescript.",
     "main": "dist/cjs/index.js",
     "module": "dist/esm/index.js",
     "types": "dist/esm/index.d.ts",

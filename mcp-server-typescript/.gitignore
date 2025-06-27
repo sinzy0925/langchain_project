@@ -13,6 +13,7 @@ __pycache__/
 .env
 node_modules/
 .Python
+bin/
 bin/logs/
 bin/output/
 build/

@@ -1,13 +1,13 @@
 {
-    "name": "scraping-mcp-server",
+    "name": "mcp-server-typescript",
     "version": "1.0.0",
-    "description": "MCP server that invokes YourScrapingApp.exe to perform various scraping tasks.",
+    "description": "MCP server that invokes YourScrapingApp.app to perform various scraping tasks.",
     "main": "dist/server.js",
     "type": "module",
     "scripts": {
       "build": "tsc",
       "start": "node dist/server.js",
-      "dev": "tsc & node dist/server.js",
+      "dev": "tsc && node dist/server.js",
       "lint": "eslint src/**/*.ts",
       "format": "prettier --write src/**/*.ts"
     },
