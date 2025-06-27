@@ -13,6 +13,7 @@ import { fileURLToPath } from 'node:url';
 import http from 'node:http';
 import dotenv from 'dotenv';
 import fs from 'node:fs';
+import axios from 'axios'; // HTTPリクエストのためにaxiosを追加
 
 dotenv.config();
 const execFileAsync = promisify(execFile);
@@ -38,6 +39,27 @@ if (fs.existsSync(YOURSCRAPINGAPP_EXE_DIR)) {
 
 const EXECUTION_TIMEOUT = 600000;
 const MCP_SERVER_PORT = process.env.MCP_PORT ? parseInt(process.env.MCP_PORT, 10) : 3001;
+
+// Firebase Admin SDKの初期化コードは削除
+// const firebaseProjectId = process.env.FIREBASE_PROJECT_ID;
+// const serviceAccountPath = process.env.FIREBASE_SERVICE_ACCOUNT_PATH;
+
+// if (firebaseProjectId && serviceAccountPath) {
+//     try {
+//         const serviceAccount = JSON.parse(fs.readFileSync(path.resolve(projectRoot, serviceAccountPath), 'utf8'));
+//         admin.initializeApp({
+//             credential: admin.credential.cert(serviceAccount),
+//             projectId: firebaseProjectId,
+//         });
+//         console.log('[Firebase Admin] Firebase Admin SDK initialized successfully.');
+//     } catch (error) {
+//         console.error('[Firebase Admin] Failed to initialize Firebase Admin SDK:', error);
+//         console.error('[Firebase Admin] Please ensure FIREBASE_PROJECT_ID and FIREBASE_SERVICE_ACCOUNT_PATH are correctly set in .env and serviceAccountKey.json exists.');
+//     }
+// } else {
+//     console.warn('[Firebase Admin] Firebase Admin SDK not initialized. Missing FIREBASE_PROJECT_ID or FIREBASE_SERVICE_ACCOUNT_PATH in .env.');
+// }
+
 
 // --- Zodスキーマ定義 ---
 const crawlWebsiteInputSchema = z.object({
@@ -249,7 +271,7 @@ async function runYourScrapingAppTool(
 }
 
 function setupMcpServer(): McpServer {
-    console.log("[MCP Server Init] Initializing Scraping MCP Server...");
+    console.log("[MCP Server Init] Initializing Scraping MCP Server.");
     const server = new McpServer({ name: "ScrapingToolsServer", version: "1.0.0" });
     console.log("[MCP Server Init] Server instance created.");
     
@@ -271,6 +293,17 @@ function setupMcpServer(): McpServer {
         async (params) => runYourScrapingAppTool("google_search", params)
     );
     console.log("[MCP Server Tool] 'google_search' tool defined.");
+    // ★★★ ここまで ★★★
+
+    // ★★★ 新規追加: get_counter ツール ★★★
+    const getCounterInputSchema = z.object({}); // 引数なし
+    server.tool(
+        "get_counter",
+        "APIキーの利用状況（残り利用回数など）を取得します。",
+        getCounterInputSchema.shape,
+        async (params) => runYourScrapingAppTool("get_counter", params)
+    );
+    console.log("[MCP Server Tool] 'get_counter' tool defined.");
     // ★★★ ここまで ★★★
 
     return server;
@@ -309,6 +342,39 @@ async function startHttpServer() {
         }
     });
 
+    // ★★★ 新規追加: API利用状況確認エンドポイント ★★★
+    app.post('/check-api-usage', async (req: Request, res: Response) => {
+        console.log('[HTTP Server] Received POST /check-api-usage request');
+        const { apiKey } = req.body;
+
+        if (!apiKey) {
+            return res.status(400).json({ error: 'API Key is required.' });
+        }
+
+        const checkApiStatusUrl = process.env.FIREBASE_CHECK_API_KEY_STATUS_URL;
+        if (!checkApiStatusUrl) {
+            console.error('[HTTP Server] FIREBASE_CHECK_API_KEY_STATUS_URL is not set in .env');
+            return res.status(500).json({ error: 'Server configuration error: Firebase API status URL not set.' });
+        }
+
+        try {
+            // デプロイ済みのCloud Functionを呼び出す
+            const response = await axios.post(checkApiStatusUrl, { apiKey });
+            console.log('[HTTP Server] API Usage Info from Cloud Function:', response.data);
+            res.json(response.data);
+
+        } catch (error: any) {
+            console.error('[HTTP Server] Error checking API usage via Cloud Function:', error.message);
+            if (error.response) {
+                // Cloud Functionからのエラーレスポンスをクライアントに返す
+                res.status(error.response.status).json(error.response.data);
+            } else {
+                res.status(500).json({ error: 'Internal server error when checking API usage.', details: error.message });
+            }
+        }
+    });
+    // ★★★ ここまで ★★★
+
     app.get('/mcp', (req: Request, res: Response) => { 
         console.log('[HTTP Server] GET /mcp (Not Allowed for Stateless).'); 
         res.status(405).set('Allow', 'POST').json({ jsonrpc: "2.0", error: { code: -32601, message: "Method Not Allowed. Use POST." }, id: null });
@@ -316,11 +382,12 @@ async function startHttpServer() {
 
     const httpServer = http.createServer(app);
     httpServer.listen(MCP_SERVER_PORT, () => {
-        console.log("==========================================================");
+        console.log("===========================================================");
         console.log(` Scraping MCP Server is running (Stateless HTTP Mode) `);
         console.log(` Listening for POST requests on http://localhost:${MCP_SERVER_PORT}/mcp `);
+        console.log(` Listening for POST requests on http://localhost:${MCP_SERVER_PORT}/check-api-usage `);
         console.log(` -> Invoking YourScrapingApp.exe from: ${YOURSCRAPINGAPP_EXE_PATH}`);
-        console.log("==========================================================");
+        console.log("===========================================================");
         console.log("Waiting for client connections...");
     });
 

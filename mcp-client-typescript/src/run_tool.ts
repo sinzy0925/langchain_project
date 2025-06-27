@@ -34,9 +34,11 @@ async function run(): Promise<void> {
 
   try {
     await client.connect();
+    console.error(`MCP Client connected to: ${SERVER_URL}`); // 標準エラー出力に変更
 
     // ▼▼▼▼▼ 変更点: clientの各メソッドを直接呼び出す ▼▼▼▼▼
     let result;
+
     switch (toolName) {
       case 'google_search':
         result = await client.googleSearch(parsedArgs);
@@ -49,6 +51,9 @@ async function run(): Promise<void> {
         break;
       case 'scrape_law_page':
         result = await client.scrapeLawPage(parsedArgs);
+        break;
+      case 'get_counter': // ★★★ 新規追加 ★★★
+        result = await client.getCounter();
         break;
       default:
         throw new Error(`Unsupported tool name: ${toolName}`);
@@ -81,6 +86,7 @@ async function run(): Promise<void> {
   } finally {
     if (client.isConnected) {
       await client.close();
+      console.error(`MCP Client disconnected from: ${SERVER_URL}`); // 標準エラー出力に変更
     }
   }
 }

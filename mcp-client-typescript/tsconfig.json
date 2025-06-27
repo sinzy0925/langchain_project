@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2022",
     "module": "ESNext",
-    "moduleResolution": "node", // NodeNext から node に変更済み
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -15,11 +15,8 @@
   },
   "include": ["src/**/*.ts"],
   "exclude": ["node_modules", "dist", "tests", "examples"],
-  "ts-node": { // ts-node 用の設定を追加
+  "ts-node": {
     "esm": true,
-    "experimentalSpecifierResolution": "node" // 必要に応じて
-    // "compilerOptions": { // ts-node実行時のみ上書きするオプション
-    //   "module": "CommonJS" // もしESMでどうしても動かない場合の最終手段 (非推奨)
-    // }
+    "experimentalSpecifierResolution": "node"
   }
 }

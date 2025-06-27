@@ -50,6 +50,7 @@ import type {
   GetGoogleAiSummaryResult,
   CrawlWebsiteResult,
   ScrapeLawPageResult,
+  CheckApiUsageResult, // ★★★ 追加
 } from './interfaces/toolResults/index.js';
 import type {
   RetryOptions,
@@ -165,7 +166,7 @@ export class McpClient {
       await this.sdkClient.connect(this.transport, connectOptions);
 
       this._isConnected = true;
-      console.log(`MCP Client connected to: ${this.serverUrl.toString()}`);
+      console.warn(`MCP Client connected to: ${this.serverUrl.toString()}`); // console.warn に変更
       const info = this.serverInformation;
       if (!info || !info.serverInfo || !info.serverCapabilities) {
           this._isConnected = false;
@@ -217,7 +218,7 @@ export class McpClient {
             await this.safelyCloseTransport();
         }
         this._isConnected = false;
-        console.log(`MCP Client disconnected from: ${this.serverUrl.toString()}`);
+        console.warn(`MCP Client disconnected from: ${this.serverUrl.toString()}`); // console.warn に変更
     }
   }
 
@@ -358,6 +359,13 @@ export class McpClient {
     const result = await this.callToolRaw('google_search', args as unknown as Record<string, any>, undefined, requestOptions);
     return this.parseToolResult<GoogleSearchResult>(result, 'google_search');
   }
+
+  // ★★★ 新規追加: getCounter メソッド ★★★
+  async getCounter(requestOptions?: McpClientRequestOptions): Promise<CheckApiUsageResult> {
+    const result = await this.callToolRaw('get_counter', {}, undefined, requestOptions);
+    return this.parseToolResult<CheckApiUsageResult>(result, 'get_counter');
+  }
+  // ★★★ ここまで ★★★
 
   private parseToolResult<T>(result: CallToolResult, toolName: string): T {
     if (result.isError) {

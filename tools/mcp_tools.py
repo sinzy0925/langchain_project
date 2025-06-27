@@ -17,7 +17,7 @@ EXECUTION_TIMEOUT = 300.0
 TSX_EXECUTABLE_NAME = "tsx.cmd" if sys.platform == "win32" else "tsx"
 TSX_EXECUTABLE_PATH = CLIENT_PROJECT_PATH / "node_modules" / ".bin" / TSX_EXECUTABLE_NAME
 
-# --- Pydanticモデル定義 (変更なし) ---
+# --- Pydanticモデル定義 (変更なし)---
 class CrawlWebsiteArgs(BaseModel):
     url: str = Field(description="クロールを開始するURL。")
     selector: str = Field(description="辿るリンクを指定するCSSセレクタ。例: 'a', '.content a'")
@@ -31,6 +31,12 @@ class ScrapeLawPageArgs(BaseModel):
 class GoogleSearchArgs(BaseModel):
     query: str = Field(description="Googleで検索するクエリ文字列。")
     search_pages: Optional[int] = Field(None)
+
+# ★★★ 新規追加: CheckApiUsageArgs Pydanticモデル ★★★
+class CheckApiUsageArgs(BaseModel):
+    # apiKey: str = Field(description="確認するAPIキー。") # APIキーは内部で取得するため不要
+    pass
+# ★★★ ここまで ★★★
 
 # --- 共通ヘルパー関数 (完全同期に変更) ---
 def _run_mcp_tool_sync(tool_name: str, args_dict: Dict[str, Any]) -> str:
@@ -140,11 +146,22 @@ def scrape_law_page(url: str, keyword: str) -> str:
     validated_args = ScrapeLawPageArgs(**args).model_dump()
     return _run_mcp_tool_sync("scrape_law_page", validated_args)
 
+# ★★★ 新規追加: check_api_usage ツール ★★★
+@tool(args_schema=CheckApiUsageArgs)
+def check_api_usage() -> str:
+    """
+    APIキーの利用状況（残り利用回数など）を確認します。
+    """
+    # APIキーはinterceptor01側でキーリングから取得するため、ここでは渡さない
+    return _run_mcp_tool_sync("get_counter", {})
+# ★★★ ここまで ★★★
+
 all_tools = [
     google_search,
     crawl_website,
     get_google_ai_summary,
     scrape_law_page,
+    check_api_usage, # ★★★ 追加 ★★★
 ]
 
 def aaaa():
